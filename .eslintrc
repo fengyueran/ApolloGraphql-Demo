@@ -13,6 +13,7 @@
     "no-unused-vars": "warn",
     "no-trailing-spaces": "off",
     "prefer-destructuring": "off",
+    "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-one-expression-per-line": "off",
     "react/prefer-stateless-function": "off"
