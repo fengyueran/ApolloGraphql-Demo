@@ -1,3 +1,6 @@
+import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { resolvers } from './resolvers';
+
 const typeDefs = `
   #数据类型
   type Card {
@@ -10,4 +13,8 @@ const typeDefs = `
     cards: [Card]
   }
 `;
-export default typeDefs;
+
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+addMockFunctionsToSchema({ schema });
+
+export { schema };
