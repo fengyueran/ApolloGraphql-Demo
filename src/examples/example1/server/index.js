@@ -1,12 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
+import cors from 'cors';
 
 import { schema } from '../mock/schema';
 
 const PORT = 8080;
 const server = express();
 
+server.use('*', cors({ origin: 'http://localhost:1989' }))
 server.get('/', (req, res) => {
   res.send('Hello World!');
 });
