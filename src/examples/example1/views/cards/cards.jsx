@@ -4,8 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'react-apollo';
-import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
-import { addCardMutation } from '../../models/local';
+import { VContainer, FlexContainer } from '@xinghunm/widgets';
+import { cardsListQuery, addCardMutation } from '../../models/local';
 
 const cardStyles = {
   width: 200,
@@ -39,7 +39,8 @@ const AddCard = ({ mutate }) => (
             name: 'test',
             sex: 'male'
           }
-        }
+        },
+        refetchQueries: [{ query: cardsListQuery }], 
       });
     }}
   >
@@ -98,5 +99,5 @@ const Cards = ({ data: { loading, error, cards } }) => {
 Cards.propTypes = {
   data: PropTypes.object.isRequired,
 };
-
-export default Cards;
+const CardsWithData = graphql(cardsListQuery)(Cards);
+export default CardsWithData;

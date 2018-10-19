@@ -3,10 +3,9 @@ import React, { Component } from 'react';
 import { LineContainer } from '@xinghunm/widgets';
 import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloProvider, graphql } from 'react-apollo';
+import { ApolloProvider } from 'react-apollo';
 import { HttpLink } from 'apollo-link-http';
-import { cardsListQuery } from './models/local';
-import Cards from './views/cards';
+import CardsWithData from './views/cards';
 
 
 const httpLink = new HttpLink({ 
@@ -17,8 +16,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-
-const CardsWithData = graphql(cardsListQuery)(Cards);
 class App extends Component {
   render() {
     return (
