@@ -4,6 +4,7 @@ const cardsListQuery = gql`
   query CardsListQuery {
     cards {
       id
+      caseName
       name
       sex
     }

@@ -4,7 +4,8 @@ import { resolvers } from './resolvers';
 const typeDefs = `
   #数据类型
   type Card {
-    id: ID!   # "!" 为必填
+    id: ID!   # "!" 表示必填参数
+    caseName: String
     name: String
     sex: String
   }
@@ -13,6 +14,8 @@ const typeDefs = `
   type Query {
     cards: [Card]
   }
+
+  #数据修改
 `;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });

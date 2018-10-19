@@ -7,27 +7,35 @@ import { LineContainer, VContainer } from '@xinghunm/widgets';
 
 const cardStyles = {
   width: 200,
-  height: 100,
+  height: 110,
   margin: 5,
   background: '#AFC9F1',
 };
 
 const Text = styled.span`
-  margin: 5px;
+  margin: 5px 5px 5px 10px;
 `;
 
-const Card = ({ name, sex }) => (
+const CaseName = styled.h3`
+  margin: 10px;
+`;
+
+const Card = ({ caseName, name, sex }) => (
   <VContainer style={cardStyles}>
+    <CaseName>
+      {caseName}
+    </CaseName>
     <Text>
-      {`name: ${name}`}
+      {`Name: ${name}`}
     </Text>
     <Text>
-      {`sex: ${sex}`}
+      {`Sex: ${sex}`}
     </Text>
   </VContainer>
 );
 
 Card.propTypes = {
+  caseName: PropTypes.string.isRequired,
   sex: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
