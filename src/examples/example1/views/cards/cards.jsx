@@ -99,5 +99,7 @@ const Cards = ({ data: { loading, error, cards } }) => {
 Cards.propTypes = {
   data: PropTypes.object.isRequired,
 };
-const CardsWithData = graphql(cardsListQuery)(Cards);
+const CardsWithData = graphql(cardsListQuery, {
+  options: { pollInterval: 5000 } // 5s拉取一次数据
+})(Cards);
 export default CardsWithData;
