@@ -20,8 +20,15 @@ export const resolvers = {
     addCard: (root, { i }) => {
       const newCard = { id: nextId++, ...i };
       cards.push(newCard);
+      console.log('add card', cards);
       return newCard;
+    },
+    deleteCard: (root, args) => {
+      cards.splice(0, 1);
+      console.log('delete card', root);
+      return cards;
     }
+
   }
 
 };

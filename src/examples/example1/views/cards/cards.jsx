@@ -4,8 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'react-apollo';
-import { VContainer, FlexContainer } from '@xinghunm/widgets';
-import { cardsListQuery, addCardMutation } from '../../models/local';
+import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
+import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../models/local';
 
 const cardStyles = {
   width: 200,
@@ -40,7 +40,7 @@ const AddCard = ({ mutate }) => (
             sex: 'male'
           }
         },
-        refetchQueries: [{ query: cardsListQuery }], 
+        refetchQueries: [{ query: cardsListQuery }], // 重新获取
       });
     }}
   >
@@ -54,6 +54,27 @@ AddCard.propTypes = {
 const AddCardWithMutation = graphql(
   addCardMutation
 )(AddCard);
+
+const DeleteCard = ({ mutate }) => (
+  <Button 
+    onClick={() => {
+      mutate({
+        variables: { 
+          id: "test"
+        },
+      });
+    }}
+  >
+    Delete Card
+  </Button>
+);
+DeleteCard.propTypes = {
+  mutate: PropTypes.func.isRequired
+};
+
+const DeleteCardWithMutation = graphql(
+  deleteCardMutation
+)(DeleteCard);
 
 const Card = ({ caseName, name, sex }) => (
   <VContainer style={cardStyles}>
@@ -84,10 +105,13 @@ const Cards = ({ data: { loading, error, cards } }) => {
   }
   return (
     <VContainer>
-      <AddCardWithMutation />
+      <LineContainer>
+        <AddCardWithMutation />
+        <DeleteCardWithMutation />
+      </LineContainer>
       <FlexContainer>
         {
-          cards.map(cardInfo => (
+          cards && cards.map(cardInfo => (
             <Card key={cardInfo.id} {...cardInfo} />
           ))
         }

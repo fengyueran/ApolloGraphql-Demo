@@ -2,6 +2,14 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { resolvers } from './resolvers';
 
 const typeDefs = `
+  # 用于创建 case 的输入
+  input CreateCardInput {
+      # Case名字
+      caseName: String!
+      sex: String
+      name: String
+  }
+
   #数据类型
   type Card {
     id: ID!   # "!" 表示必填参数
@@ -17,15 +25,8 @@ const typeDefs = `
 
   #数据修改
   type Mutation {
-    addCard(i: CreateCardInput): Card #返回Card类型数据
-  }
-
-  # 用于创建 case 的输入
-  input CreateCardInput {
-      # Case名字
-      caseName: String!
-      sex: String
-      name: String
+    addCard(i: CreateCardInput): Card #返回Card类型数据(必须带返回值)
+    deleteCard(id: String): [Card]
   }
 `;
 
