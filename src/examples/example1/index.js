@@ -6,7 +6,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, graphql } from 'react-apollo';
 import { HttpLink } from 'apollo-link-http';
 import { cardsListQuery } from './models/local';
-import Cards from '../../views/cards';
+import Cards from './views/cards';
 
 
 const httpLink = new HttpLink({ 

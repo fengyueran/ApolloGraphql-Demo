@@ -10,8 +10,18 @@ const cards = [{
   sex: 'female'
 }];
 
+let nextId = 3;
+
 export const resolvers = {
   Query: {
     cards: () => cards
+  },
+  Mutation: {
+    addCard: (root, { i }) => {
+      const newCard = { id: nextId++, ...i };
+      cards.push(newCard);
+      return newCard;
+    }
   }
+
 };

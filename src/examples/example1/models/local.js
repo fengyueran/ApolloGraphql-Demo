@@ -11,4 +11,14 @@ const cardsListQuery = gql`
   }
 `;
 
-export { cardsListQuery };
+const addCardMutation = gql`
+  mutation addCard($i: CreateCardInput!) {
+    addCard(i: $i) {
+      caseName
+      name
+      sex
+    }
+  }
+`;
+
+export { cardsListQuery, addCardMutation };

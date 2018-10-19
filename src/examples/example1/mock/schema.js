@@ -16,7 +16,37 @@ const typeDefs = `
   }
 
   #数据修改
+  type Mutation {
+    addCard(i: CreateCardInput): Card #返回Card类型数据
+  }
+
+  # 用于创建 case 的输入
+  input CreateCardInput {
+      # Case名字
+      caseName: String!
+      sex: String
+      name: String
+  }
 `;
+
+// Apollo Client Developer Tools
+/*
+  query {
+    cards {
+      id
+      caseName
+      name
+      sex
+    }
+  }
+
+  mutation {
+  addCard(caseName: "HT-18YKI6"){
+    id
+    caseName
+  }
+}
+*/
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 // addMockFunctionsToSchema({ schema }); //快速构建mock函数， resolvers自定义
