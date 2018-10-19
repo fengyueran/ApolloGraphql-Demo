@@ -3,7 +3,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { LineContainer, VContainer } from '@xinghunm/widgets';
+import { graphql } from 'react-apollo';
+import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
+import { addCardMutation } from '../../models/local';
 
 const cardStyles = {
   width: 200,
@@ -19,6 +21,38 @@ const Text = styled.span`
 const CaseName = styled.h3`
   margin: 10px;
 `;
+
+const Button = styled.button`
+  outline: none;
+  height: 39px;
+  width: 85px;
+  margin: 5px;
+`;
+
+const AddCard = ({ mutate }) => (
+  <Button 
+    onClick={() => {
+      mutate({
+        variables: { 
+          i: {
+            caseName: "HT-18TEST",
+            name: 'test',
+            sex: 'male'
+          }
+        }
+      });
+    }}
+  >
+    Add Card
+  </Button>
+);
+AddCard.propTypes = {
+  mutate: PropTypes.func.isRequired
+};
+
+const AddCardWithMutation = graphql(
+  addCardMutation
+)(AddCard);
 
 const Card = ({ caseName, name, sex }) => (
   <VContainer style={cardStyles}>
@@ -48,13 +82,16 @@ const Cards = ({ data: { loading, error, cards } }) => {
     return <p>{error.message}</p>;
   }
   return (
-    <LineContainer>
-      {
-        cards.map(cardInfo => (
-          <Card key={cardInfo.id} {...cardInfo} />
-        ))
-      }
-    </LineContainer>
+    <VContainer>
+      <AddCardWithMutation />
+      <FlexContainer>
+        {
+          cards.map(cardInfo => (
+            <Card key={cardInfo.id} {...cardInfo} />
+          ))
+        }
+      </FlexContainer>
+    </VContainer>
   );
 }; 
 
