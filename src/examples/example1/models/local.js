@@ -5,8 +5,9 @@ const cardsListQuery = gql`
     cards {
       id
       name
+      sex
     }
   }
 `;
 
-export { cardsListQuery }; // eslint-disable-line
+export { cardsListQuery };

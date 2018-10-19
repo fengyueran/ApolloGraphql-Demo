@@ -6,6 +6,7 @@ const typeDefs = `
   type Card {
     id: ID!   # "!" 为必填
     name: String
+    sex: String
   }
 
   #数据查询
@@ -15,6 +16,6 @@ const typeDefs = `
 `;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-addMockFunctionsToSchema({ schema });
+// addMockFunctionsToSchema({ schema }); //快速构建mock函数， resolvers自定义
 
 export { schema };

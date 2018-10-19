@@ -4,10 +4,9 @@ import { LineContainer } from '@xinghunm/widgets';
 import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { HttpLink } from 'apollo-link-http';
 import { cardsListQuery } from './models/local';
-import CardsList from '../../views/cards_list';
+import Cards from '../../views/cards';
 
 
 const httpLink = new HttpLink({ 
@@ -18,19 +17,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-// client
-//   .query({
-//     query: gql`
-//       {
-//         rates(currency: "USD") {
-//           currency
-//         }
-//       }
-//     `
-//   })
-//   .then(result => console.log('adsfasdfa', result));
 
-const CardsListWithData = graphql(cardsListQuery)(CardsList);
+const CardsWithData = graphql(cardsListQuery)(Cards);
 class App extends Component {
   render() {
     return (
@@ -40,7 +28,7 @@ class App extends Component {
             <h1 className="App-title">Welcome to Apollo Graphql</h1>
           </header>
           <LineContainer>
-            <CardsListWithData />
+            <CardsWithData />
           </LineContainer>
         </div>
       </ApolloProvider>

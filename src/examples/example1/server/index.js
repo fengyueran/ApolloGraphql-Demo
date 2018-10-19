@@ -8,7 +8,7 @@ import { schema } from '../mock/schema';
 const PORT = 8080;
 const server = express();
 
-server.use('*', cors({ origin: 'http://localhost:1989' }))
+server.use('*', cors({ origin: 'http://localhost:1989' }));
 server.get('/', (req, res) => {
   res.send('Hello World!');
 });
