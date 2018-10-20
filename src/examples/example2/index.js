@@ -7,7 +7,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, concat, Observable } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
-import DogsList from './views/dogs-list';
+import CardsWithData from './views/cards';
 
 const asyncMiddleware = setContext(request => new Promise((success) => {
   setTimeout(() => {
@@ -33,7 +33,7 @@ class App extends Component {
             <h1 className="App-title">Welcome to Apollo Graphql</h1>
           </header>
           <LineContainer>
-            <DogsList />
+            <CardsWithData />
           </LineContainer>
         </div>
       </ApolloProvider>

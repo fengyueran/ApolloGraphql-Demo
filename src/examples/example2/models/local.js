@@ -1,23 +1,32 @@
 import gql from 'graphql-tag';
 
-const dogsListQuery = gql`
-  query DogsQuery {
-    dogs { 
+const cardsListQuery = gql`
+  query CardsListQuery {
+    cards { # 返回cards数组，数组每个元素包含id，caseName, name和sex
       id
-      breed
+      caseName
       name
-      age
+      sex
     }
   }
 `;
 
-const dogInfoQuery = gql`
-  query DogQuery($breed: String!) {
-    dog(breed: $breed) {
-      id
-      detail
+const addCardMutation = gql`
+  mutation addCard($i: CreateCardInput!) {
+    addCard(i: $i) {
+      caseName
+      name
+      sex
     }
   }
 `;
 
-export { dogsListQuery, dogInfoQuery };
+const deleteCardMutation = gql`
+  mutation deleteCard($caseName: String!) {
+    deleteCard(caseName: $caseName) {
+      caseName #只返回caseName
+    }
+  }
+`;
+
+export { cardsListQuery, addCardMutation, deleteCardMutation };
