@@ -1,0 +1,44 @@
+import React, { Component } from 'react';
+
+import { LineContainer } from '@xinghunm/widgets';
+import { ApolloClient } from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloLink, concat, Observable } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
+import { HttpLink } from 'apollo-link-http';
+import DogsList from './views/dogs-list';
+
+const asyncMiddleware = setContext(request => new Promise((success) => {
+  setTimeout(() => {
+    success({ token: 'async found token' });
+  }, 500);
+}));
+
+const httpLink = new HttpLink({ 
+  uri: 'http://localhost:9090/graphql'
+});
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  // link: concat(asyncMiddleware, httpLink),
+  link: httpLink
+});
+
+class App extends Component {
+  render() {
+    return (
+      <ApolloProvider client={client}>
+        <div className="App">
+          <header className="App-header">
+            <h1 className="App-title">Welcome to Apollo Graphql</h1>
+          </header>
+          <LineContainer>
+            <DogsList />
+          </LineContainer>
+        </div>
+      </ApolloProvider>
+    );
+  }
+}
+
+export default App;
