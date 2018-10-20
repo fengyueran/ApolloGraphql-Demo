@@ -8,11 +8,13 @@ const typeDefs = `
     breed: String
     name: String
     age: Int
+    detail: String
   }
 
   #数据查询
   type Query {
     dogs: [Dog]
+    dog(breed: String!): Dog
   }
 `;
 

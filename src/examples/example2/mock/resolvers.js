@@ -12,6 +12,13 @@ const dogs = [{
 
 export const resolvers = {
   Query: {
-    dogs: () => dogs
+    dogs: () => dogs,
+    dog: (root, { breed }, context) => {
+      const info = {
+        Husky: 'lucy',
+        Sharpei: 'lily',
+      };
+      return { id: 5, detail: info[breed] };
+    },
   },
 };

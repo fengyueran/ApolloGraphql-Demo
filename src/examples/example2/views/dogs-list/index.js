@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql, Query } from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
-import { dogsListQuery } from '../../models/local';
+import { dogsListQuery, dogInfoQuery } from '../../models/local';
 
 const cardStyles = {
   width: 200,
@@ -53,7 +53,7 @@ Dog.propTypes = {
 };
 
 const DogInfo = ({ breed }) => (
-  <Query query={dogsListQuery} variables={{ breed }}>
+  <Query query={dogInfoQuery} variables={{ breed }}>
     {
       ({ loading, error, data }) => {
         if (loading) {
@@ -64,7 +64,7 @@ const DogInfo = ({ breed }) => (
         }
         return (
           <Text>
-            {`this is ${breed} dog.`}
+            {`this is ${data.dog.detail}.`}
           </Text>);
       }
     }

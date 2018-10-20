@@ -11,4 +11,13 @@ const dogsListQuery = gql`
   }
 `;
 
-export { dogsListQuery };
+const dogInfoQuery = gql`
+  query DogQuery($breed: String!) {
+    dog(breed: $breed) {
+      id
+      detail
+    }
+  }
+`;
+
+export { dogsListQuery, dogInfoQuery };
