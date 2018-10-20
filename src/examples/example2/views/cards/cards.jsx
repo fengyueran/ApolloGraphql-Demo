@@ -3,9 +3,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { graphql, Query } from 'react-apollo';
+import { graphql, Query, ApolloConsumer } from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
-import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../models/local';
+import { 
+  cardsListQuery, cardQuery, addCardMutation, deleteCardMutation
+} from '../../models/local';
 
 const cardStyles = {
   width: 200,
@@ -116,46 +118,89 @@ Card.propTypes = {
   name: PropTypes.string.isRequired,
 };
 
-const Cards = () => (
-  <Query 
-    query={cardsListQuery}
-    // pollInterval={500}// 每500ms query一次
-  >
-    {
-      ({ 
-        loading, error, data: { cards }, startPolling, stopPolling, refetch 
-      }) => {
-        if (loading) {
-          return <p>Loading</p>;
-        }
-        if (error) {
-          return <p>{error.message}</p>;
-        }
-
-        return (
-          <VContainer>
-            <LineContainer>
-              <AddCardWithMutation />
-              <DeleteCardWithMutation />
-              <Button onClick={() => refetch()}>
-                Refetch
-              </Button>
-            </LineContainer>
-            <FlexContainer>
-              {
-                cards && cards.map(cardInfo => (
-                  <Card key={cardInfo.id} {...cardInfo} />
-                ))
-              }
-            </FlexContainer>
-          </VContainer>
-        );
-      }
+const StartQuery = ({ onCardFetched }) => (
+  <ApolloConsumer>
+    {client => (
+      <Button onClick={async () => {
+        const { data } = await client.query({
+          query: cardQuery,
+          variables: { 
+            name: "snow"
+          },
+        });
+        onCardFetched(data);
+      }}
+      >
+        Find Snow
+      </Button>)
     }
-  </Query>);
+  </ApolloConsumer>);
 
-// Cards.propTypes = {
-//   data: PropTypes.object.isRequired,
-// };
+StartQuery.propTypes = {
+  onCardFetched: PropTypes.func.isRequired
+};
+class App extends React.Component {
+  state = {
+    foundedCard: null
+  }
 
-export default Cards;
+  onCardFetched = (data) => {
+    const { card } = data;
+    this.setState({ foundedCard: card });
+  }
+
+  render() {
+    const { foundedCard } = this.state;
+    return (
+      <Query 
+        query={cardsListQuery}
+        notifyOnNetworkStatusChange
+        // pollInterval={500}// 每500ms query一次
+      >
+        {
+          ({ 
+            loading, error, data, startPolling, stopPolling, refetch,
+            networkStatus 
+          }) => {
+            const cards = data && data.cards;
+            if (networkStatus === 4) return 'Refetching'; // networkStatus1-8，详见networkStatushttps://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-networkStatus
+            if (loading) {
+              return <p>Loading</p>;
+            }
+            if (error) {
+              return <p>{error.message}</p>;
+            }
+
+            return (
+              <VContainer>
+                <LineContainer>
+                  <AddCardWithMutation />
+                  <DeleteCardWithMutation />
+                  <Button onClick={() => refetch()}>
+                    Refetch
+                  </Button>
+                  <StartQuery onCardFetched={this.onCardFetched} />
+                </LineContainer>
+                <FlexContainer>
+                  {
+                    cards && cards.map(card => (
+                      <Card key={card.id} {...card} />
+                    ))
+                  }
+                </FlexContainer>
+                {
+                  foundedCard && (
+                    <Text>
+                      {`This is ${foundedCard.name}, Sex:${foundedCard.sex}, CaseName: ${foundedCard.caseName}` }
+                    </Text>
+                  )
+                }
+              </VContainer>
+            );
+          }
+        }
+      </Query>);
+  }
+}
+
+export default App;

@@ -14,7 +14,12 @@ let nextId = 3;
 
 export const resolvers = {
   Query: {
-    cards: () => cards
+    cards: () => cards,
+    card: (root, { name }) => {
+      console.log('55555555555555');
+      const foundCard = cards.find(card => card.name === name);
+      return foundCard;
+    }
   },
   Mutation: {
     addCard: (root, { i }) => {

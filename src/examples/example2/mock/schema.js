@@ -21,6 +21,7 @@ const typeDefs = `
   #数据查询
   type Query {
     cards: [Card]
+    card(name: String!): Card
   }
 
   #数据修改
