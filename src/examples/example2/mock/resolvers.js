@@ -2,12 +2,14 @@ const cards = [{
   id: 1,
   caseName: 'HT-18CH7U',
   name: 'snow',
-  sex: 'male'
+  sex: 'male',
+  age: 17,
 }, {
   id: 2,
   caseName: 'HT-18MZU3',
   name: 'lucy',
-  sex: 'female'
+  sex: 'female',
+  age: 18,
 }];
 
 let nextId = 3;

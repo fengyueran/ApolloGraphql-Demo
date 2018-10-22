@@ -6,7 +6,7 @@ const cardsListQuery = gql`
       id
       caseName
       name
-      sex
+      age
     }
   }
 `;
@@ -17,7 +17,7 @@ const cardQuery = gql`
       id
       caseName
       name
-      sex
+      age
     }
   }
 `;
@@ -28,6 +28,7 @@ const addCardMutation = gql`
       caseName
       name
       sex
+      age
     }
   }
 `;

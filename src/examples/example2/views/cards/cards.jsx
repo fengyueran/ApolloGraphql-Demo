@@ -44,7 +44,8 @@ const AddCard = () => (
                 i: {
                   caseName: "HT-18TEST",
                   name: 'test',
-                  sex: 'male'
+                  sex: 'male',
+                  age: 20
                 }
               },
               refetchQueries: [{ query: cardsListQuery }], // 重新获取
@@ -89,7 +90,7 @@ const DeleteCard = () => (
   </Mutation> 
 );
 
-const Card = ({ caseName, name, sex }) => (
+const Card = ({ caseName, name, age }) => (
   <VContainer style={cardStyles}>
     <CaseName>
       {caseName}
@@ -98,14 +99,14 @@ const Card = ({ caseName, name, sex }) => (
       {`Name: ${name}`}
     </Text>
     <Text>
-      {`Sex: ${sex}`}
+      {`Age: ${age}`}
     </Text>
   </VContainer>
 );
 
 Card.propTypes = {
   caseName: PropTypes.string.isRequired,
-  sex: PropTypes.string.isRequired,
+  age: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 

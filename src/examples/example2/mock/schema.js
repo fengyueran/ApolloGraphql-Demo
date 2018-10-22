@@ -8,6 +8,7 @@ const typeDefs = `
       caseName: String!
       sex: String
       name: String
+      age: Int
   }
 
   #数据类型
@@ -16,6 +17,7 @@ const typeDefs = `
     caseName: String
     name: String
     sex: String
+    age: Int
   }
 
   #数据查询
