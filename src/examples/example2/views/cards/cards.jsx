@@ -1,6 +1,6 @@
 
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { 
@@ -74,18 +74,22 @@ const DeleteCard = () => (
     }}
   >
     {
-      (deleteCard, { data }) => (
-        <Button 
-          onClick={() => {
-            deleteCard({
-              variables: { 
-                caseName: "test"
-              }
-            });
-          }}
-        >
-          Delete Card
-        </Button>
+      (deleteCard, { loading, error }) => (
+        <Fragment>
+          <Button 
+            onClick={() => {
+              deleteCard({
+                variables: { 
+                  caseName: "test"
+                }
+              });
+            }}
+          >
+            Delete Card
+          </Button>
+          { loading && <p>Loading...</p>}
+          { error && <p>Error :( Please try again</p>}
+        </Fragment>
       )
     }
   </Mutation> 
