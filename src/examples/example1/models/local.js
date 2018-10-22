@@ -22,8 +22,8 @@ const addCardMutation = gql`
 `;
 
 const deleteCardMutation = gql`
-  mutation deleteCard($id: String!) {
-    deleteCard(id: $id) {
+  mutation deleteCard($caseName: String!) {
+    deleteCard(caseName: $caseName) {
       caseName #只返回caseName
     }
   }

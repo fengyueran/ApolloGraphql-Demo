@@ -60,8 +60,21 @@ const DeleteCard = ({ mutate }) => (
     onClick={() => {
       mutate({
         variables: { 
-          id: "test"
+          caseName: "test"
         },
+        update: (cache, { data: { deleteCard } }) => { // deleteCard为该mutation返回的数据
+          // Read the data from the cache for this query.
+          let { cards } = cache.readQuery({ query: cardsListQuery });
+          cards = cards.slice();
+          if (cards) {
+            cards.splice(0, 1);
+          }
+          // Write the data back to the cache.
+          cache.writeQuery({ 
+            query: cardsListQuery,
+            data: { cards }
+          });
+        }
       });
     }}
   >
@@ -124,6 +137,6 @@ Cards.propTypes = {
   data: PropTypes.object.isRequired,
 };
 const CardsWithData = graphql(cardsListQuery, {
-  options: { pollInterval: 5000 } // 5s拉取一次数据
+  // options: { pollInterval: 500 } // 5s拉取一次数据
 })(Cards);
 export default CardsWithData;

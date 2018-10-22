@@ -26,7 +26,7 @@ const typeDefs = `
   #数据修改
   type Mutation {
     addCard(i: CreateCardInput): Card #返回Card类型数据(必须带返回值)
-    deleteCard(id: String): [Card]
+    deleteCard(caseName: String): Card
   }
 `;
 
