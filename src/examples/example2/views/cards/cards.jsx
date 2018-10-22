@@ -3,7 +3,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { graphql, Query, ApolloConsumer } from 'react-apollo';
+import { 
+  graphql, Query, ApolloConsumer, Mutation
+} from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
 import { 
   cardsListQuery, cardQuery, addCardMutation, deleteCardMutation
@@ -31,31 +33,34 @@ const Button = styled.button`
   margin: 5px;
 `;
 
-const AddCard = ({ mutate }) => (
-  <Button 
-    onClick={() => {
-      mutate({
-        variables: { 
-          i: {
-            caseName: "HT-18TEST",
-            name: 'test',
-            sex: 'male'
-          }
-        },
-        // refetchQueries: [{ query: cardsListQuery }], // 重新获取
-      });
-    }}
-  >
-    Add Card
-  </Button>
+const AddCard = () => (
+  <Mutation mutation={addCardMutation}>
+    {
+      (addCard, { data }) => (
+        <Button 
+          onClick={() => {
+            addCard({
+              variables: { 
+                i: {
+                  caseName: "HT-18TEST",
+                  name: 'test',
+                  sex: 'male'
+                }
+              },
+              // refetchQueries: [{ query: cardsListQuery }], // 重新获取
+            });
+          }}
+        >
+          Add Card
+        </Button>
+      )
+    }
+  </Mutation>
 );
-AddCard.propTypes = {
-  mutate: PropTypes.func.isRequired
-};
 
-const AddCardWithMutation = graphql(
-  addCardMutation
-)(AddCard);
+// const AddCardWithMutation = graphql(
+//   addCardMutation
+// )(AddCard);
 
 const DeleteCard = ({ mutate }) => (
   <Button 
@@ -174,7 +179,7 @@ class App extends React.Component {
             return (
               <VContainer>
                 <LineContainer>
-                  <AddCardWithMutation />
+                  <AddCard />
                   <DeleteCardWithMutation />
                   <Button onClick={() => refetch()}>
                     Refetch

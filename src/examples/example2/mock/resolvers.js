@@ -16,7 +16,6 @@ export const resolvers = {
   Query: {
     cards: () => cards,
     card: (root, { name }) => {
-      console.log('55555555555555');
       const foundCard = cards.find(card => card.name === name);
       return foundCard;
     }
