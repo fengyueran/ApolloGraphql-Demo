@@ -30,6 +30,7 @@ const typeDefs = `
   type Mutation {
     addCard(i: CreateCardInput): Card #返回Card类型数据(必须带返回值)
     deleteCard(caseName: String): Card
+    updateCard(id: String, age: Int): Card
   }
 `;
 

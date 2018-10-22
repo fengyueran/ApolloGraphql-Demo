@@ -1,11 +1,11 @@
 const cards = [{
-  id: 1,
+  id: '1',
   caseName: 'HT-18CH7U',
   name: 'snow',
   sex: 'male',
   age: 17,
 }, {
-  id: 2,
+  id: '2',
   caseName: 'HT-18MZU3',
   name: 'lucy',
   sex: 'female',
@@ -33,6 +33,18 @@ export const resolvers = {
       cards.splice(0, 1);
       console.log('delete card', root);
       return cards[0];
+    },
+    updateCard: (root, { id, age }) => {
+      console.log('55555555');
+      const index = cards.findIndex(card => card.id === id);
+      let foundedCard;
+      if (index >= 0) {
+        foundedCard = cards[index];
+        foundedCard.age = age;
+        cards[index] = foundedCard;
+      }
+
+      return foundedCard;
     }
 
   }

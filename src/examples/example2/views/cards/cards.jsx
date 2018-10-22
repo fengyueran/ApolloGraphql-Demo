@@ -8,7 +8,8 @@ import {
 } from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
 import { 
-  cardsListQuery, cardQuery, addCardMutation, deleteCardMutation
+  cardsListQuery, cardQuery, addCardMutation, deleteCardMutation,
+  updateCardMutation
 } from '../../models/local';
 
 const cardStyles = {
@@ -90,6 +91,27 @@ const DeleteCard = () => (
   </Mutation> 
 );
 
+const UpdateCard = () => (
+  <Mutation mutation={updateCardMutation}>
+    {
+      (updateCard, { data }) => (
+        <Button 
+          onClick={() => {
+            updateCard({
+              variables: { 
+                id: '1', // 通过id修改单个item，可以自动更新而不需要update
+                age: 30
+              },
+            });
+          }}
+        >
+          Update Snow Age
+        </Button>
+      )
+    }
+  </Mutation>
+);
+
 const Card = ({ caseName, name, age }) => (
   <VContainer style={cardStyles}>
     <CaseName>
@@ -106,7 +128,7 @@ const Card = ({ caseName, name, age }) => (
 
 Card.propTypes = {
   caseName: PropTypes.string.isRequired,
-  age: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 };
 
@@ -168,6 +190,7 @@ class App extends React.Component {
                 <LineContainer>
                   <AddCard />
                   <DeleteCard />
+                  <UpdateCard />
                   <Button onClick={() => refetch()}>
                     Refetch
                   </Button>

@@ -6,6 +6,7 @@ const cardsListQuery = gql`
       id
       caseName
       name
+      sex
       age
     }
   }
@@ -17,6 +18,7 @@ const cardQuery = gql`
       id
       caseName
       name
+      sex
       age
     }
   }
@@ -41,6 +43,16 @@ const deleteCardMutation = gql`
   }
 `;
 
+const updateCardMutation = gql`
+  mutation updateCard($id: String!, $age: Int!) {
+    updateCard(id: $id, age: $age) {
+      id #必须返回id否则不能自动更新
+      age 
+    }
+  }
+`;
+
 export { 
-  cardsListQuery, cardQuery, addCardMutation, deleteCardMutation
+  cardsListQuery, cardQuery, addCardMutation, deleteCardMutation,
+  updateCardMutation
 };
