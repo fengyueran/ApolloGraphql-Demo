@@ -11,6 +11,9 @@ class Home extends Component {
             <li>
               <Link to="/example1">example1</Link>
             </li>
+            <li>
+              <Link to="/example2">example2</Link>
+            </li>
           </ul>
         </nav>
       </section>

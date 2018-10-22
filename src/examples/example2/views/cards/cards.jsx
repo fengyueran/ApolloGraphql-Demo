@@ -47,7 +47,7 @@ const AddCard = () => (
                   sex: 'male'
                 }
               },
-              // refetchQueries: [{ query: cardsListQuery }], // 重新获取
+              refetchQueries: [{ query: cardsListQuery }], // 重新获取
             });
           }}
         >
@@ -58,50 +58,36 @@ const AddCard = () => (
   </Mutation>
 );
 
-// const AddCardWithMutation = graphql(
-//   addCardMutation
-// )(AddCard);
-
-const DeleteCard = ({ mutate }) => (
-  <Button 
-    onClick={() => {
-      mutate({
-        variables: { 
-          caseName: "test"
-        },
-        update: (cache, { data: { deleteCard } }) => { // deleteCard为该mutation返回的数据
-          // Read the data from the cache for this query.
-          const data = cache.readQuery({ query: cardsListQuery });
-          const cards = data && data.cards;
-          console.log(deleteCard);
-          // Delete card from cards.
-          if (cards) {
-            cards.splice(0, 1);
-            data.cards = cards.slice();
-          }
-          // Write the data back to the cache.
-          console.log('data', data);
-          cache.writeQuery({ 
-            query: cardsListQuery,
-            variables: { 
-              caseName: "test"
-            },
-            data
-          });
-        }
+const DeleteCard = () => (
+  <Mutation 
+    mutation={deleteCardMutation}
+    update={(cache, { data: { deleteCard } }) => {
+      let { cards } = cache.readQuery({ query: cardsListQuery });
+      cards = cards.slice();
+      cards.splice(0, 1);
+      cache.writeQuery({ 
+        query: cardsListQuery,
+        data: { cards }
       });
     }}
   >
-    Delete Card
-  </Button>
+    {
+      (deleteCard, { data }) => (
+        <Button 
+          onClick={() => {
+            deleteCard({
+              variables: { 
+                caseName: "test"
+              }
+            });
+          }}
+        >
+          Delete Card
+        </Button>
+      )
+    }
+  </Mutation> 
 );
-DeleteCard.propTypes = {
-  mutate: PropTypes.func.isRequired
-};
-
-const DeleteCardWithMutation = graphql(
-  deleteCardMutation
-)(DeleteCard);
 
 const Card = ({ caseName, name, sex }) => (
   <VContainer style={cardStyles}>
@@ -180,7 +166,7 @@ class App extends React.Component {
               <VContainer>
                 <LineContainer>
                   <AddCard />
-                  <DeleteCardWithMutation />
+                  <DeleteCard />
                   <Button onClick={() => refetch()}>
                     Refetch
                   </Button>
