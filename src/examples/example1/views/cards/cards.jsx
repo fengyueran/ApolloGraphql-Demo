@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
-import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../models/local';
+import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../models/gql/remote';
 
 const cardStyles = {
   width: 200,

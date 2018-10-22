@@ -1,5 +1,3 @@
-
-
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -10,7 +8,7 @@ import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
 import { 
   cardsListQuery, cardQuery, addCardMutation, deleteCardMutation,
   updateCardMutation
-} from '../../models/local';
+} from '../../models/gql/remote';
 
 const cardStyles = {
   width: 200,
