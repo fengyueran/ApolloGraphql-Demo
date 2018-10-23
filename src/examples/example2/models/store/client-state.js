@@ -2,8 +2,9 @@ import merge from 'lodash/merge';
 import { withClientState } from 'apollo-link-state';
 
 import { userState } from './login-state';
+import { todoState } from './todo-state';
 
-const state = [userState];
+const state = [userState, todoState];
 
 
 const createClientState = (cache) => {

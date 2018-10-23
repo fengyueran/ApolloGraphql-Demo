@@ -14,6 +14,12 @@ const httpLink = new HttpLink({
   uri: 'http://localhost:9090/graphql'
 });
 
+const asyncMiddleware = setContext(request => new Promise((success) => {
+  setTimeout(() => {
+    success({ token: 'async found token' });
+  }, 500);
+}));
+
 const client = new ApolloClient({
   cache,
   // link: concat(asyncMiddleware, httpLink),

@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 const cardsListQuery = gql`
   query CardsListQuery {
-    cards { # 返回cards数组，数组每个元素包含id，caseName, name和sex
+    cards {
       id
       caseName
       name

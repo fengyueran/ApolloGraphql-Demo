@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
-import { LineContainer } from '@xinghunm/widgets';
+import { VContainer } from '@xinghunm/widgets';
 import { ApolloProvider } from 'react-apollo';
 import client from './apollo-client';
 import CardsWithData from './views/cards';
+import TodoPanel from './views/TodoPanel';
 
 class App extends Component {
   render() {
@@ -13,9 +14,10 @@ class App extends Component {
           <header className="App-header">
             <h1 className="App-title">Welcome to Apollo Graphql</h1>
           </header>
-          <LineContainer>
+          <VContainer>
             <CardsWithData />
-          </LineContainer>
+            <TodoPanel />
+          </VContainer>
         </div>
       </ApolloProvider>
     );
