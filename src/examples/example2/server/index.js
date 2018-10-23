@@ -1,26 +1,37 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { execute, subscribe } from 'graphql';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
-import cors from 'cors';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { createServer } from 'http';
 
 import { schema } from '../mock/schema';
 
 const PORT = 9090;
-const server = express();
+const app = express();
+const ws = createServer(app);
 
-server.use('*', cors({ origin: 'http://localhost:1989' }));
-server.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-server.use('/graphql', bodyParser.json(), graphqlExpress({
+app.use('/graphql', bodyParser.json(), graphqlExpress({
   schema
 }));
 
-server.use('/graphiql', graphiqlExpress({
+app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
 
-server.listen(PORT, () => {
-  console.log(`GraphQL Server is now running on http://localhost:${PORT}`)
+ws.listen(PORT, () => {
+  SubscriptionServer.create({
+    execute,
+    subscribe,
+    schema,
+    onConnect: () => { console.log('websoket connected'); }
+  }, {
+    server: ws,
+    path: '/graphql' 
+  });
+  console.log(`GraphQL ws is now running on http://localhost:${PORT}`);
 });
