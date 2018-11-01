@@ -76,10 +76,17 @@ const AddCardWithMutations = compose(
             sex: 'male'
           }
         },
-        update: (cache, { data: { deleteCard }, loading, error }) => { 
+        optimisticResponse: {
+          addCard: {
+            name: 'test',
+            id: 'tmp',
+            __typename: 'Card'
+          }
+        },
+        update: (cache, { data: { addCard }, loading, error }) => { 
           if (error) {
             console.log('add card fail');
-          } else if (deleteCard) {
+          } else if (addCard) {
             console.log('add card success');
           }
         },
