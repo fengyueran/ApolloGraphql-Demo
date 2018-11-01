@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
 import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../models/gql/remote';
 
@@ -29,10 +29,46 @@ const Button = styled.button`
   margin: 5px;
 `;
 
-const AddCard = ({ mutate }) => (
-  <Button 
-    onClick={() => {
-      mutate({
+// const AddCard = ({ addCard1, addCard2 }) => (
+//   <Button 
+//     onClick={() => {
+//       addCard1();
+//     }}
+//   >
+//     Add Card
+//   </Button>
+// );
+
+
+class AddCard extends React.Component {
+  render() {
+    const { addCard1, addCard2 } = this.props;
+    return (
+      <Button 
+        onClick={() => {
+          addCard1();
+        }}
+      >
+        Add Card
+      </Button>
+    );
+  }
+}
+
+AddCard.propTypes = {
+  addCard1: PropTypes.func.isRequired,
+  addCard2: PropTypes.func.isRequired
+};
+
+const AddCardWithMutation = graphql(
+  addCardMutation
+)(AddCard);
+
+// 多个mutation
+const AddCardWithMutations = compose(
+  graphql(addCardMutation, { 
+    props: ({ mutate }) => ({
+      addCard1: () => mutate({
         variables: { 
           i: {
             caseName: "HT-18TEST",
@@ -40,25 +76,37 @@ const AddCard = ({ mutate }) => (
             sex: 'male'
           }
         },
+        update: (cache, { data: { deleteCard }, loading, error }) => { 
+          if (error) {
+            console.log('add card fail');
+          } else if (deleteCard) {
+            console.log('add card success');
+          }
+        },
         refetchQueries: [{ query: cardsListQuery }], // 重新获取
-      });
-    }}
-  >
-    Add Card
-  </Button>
-);
-AddCard.propTypes = {
-  mutate: PropTypes.func.isRequired
-};
-
-const AddCardWithMutation = graphql(
-  addCardMutation
+      })
+    }),
+  }),
+  graphql(addCardMutation, { name: 'addCard2' }) // name为mutate函数名
 )(AddCard);
 
-const DeleteCard = ({ mutate }) => (
+const DeleteCard = ({ deleteCard }) => (
   <Button 
     onClick={() => {
-      mutate({
+      deleteCard();
+    }}
+  >
+    Delete Card
+  </Button>
+);
+DeleteCard.propTypes = {
+  deleteCard: PropTypes.func.isRequired
+};
+
+const DeleteCardWithMutation = graphql(
+  deleteCardMutation, {
+    props: ({ mutate }) => ({ 
+      deleteCard: () => mutate({
         variables: { 
           caseName: "test"
         },
@@ -75,19 +123,11 @@ const DeleteCard = ({ mutate }) => (
             data: { cards }
           });
         }
-      });
-    }}
-  >
-    Delete Card
-  </Button>
-);
-DeleteCard.propTypes = {
-  mutate: PropTypes.func.isRequired
-};
-
-const DeleteCardWithMutation = graphql(
-  deleteCardMutation
+      })
+    }),
+  }
 )(DeleteCard);
+
 
 const Card = ({ caseName, name, sex }) => (
   <VContainer style={cardStyles}>
@@ -119,7 +159,7 @@ const Cards = ({ data: { loading, error, cards } }) => {
   return (
     <VContainer>
       <LineContainer>
-        <AddCardWithMutation />
+        <AddCardWithMutations />
         <DeleteCardWithMutation />
       </LineContainer>
       <FlexContainer>
