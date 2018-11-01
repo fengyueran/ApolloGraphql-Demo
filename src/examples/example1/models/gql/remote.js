@@ -11,6 +11,16 @@ const cardsListQuery = gql`
   }
 `;
 
+const cardDetailsQuery = gql`
+  query CardDetailsQuery($cardId: ID!) {
+    cardDetail(id: $cardId) { 
+      id
+      name
+      message
+    }
+  }
+`;
+
 const addCardMutation = gql`
   mutation addCard($i: CreateCardInput!) {
     addCard(i: $i) {
@@ -29,4 +39,6 @@ const deleteCardMutation = gql`
   }
 `;
 
-export { cardsListQuery, addCardMutation, deleteCardMutation };
+export { 
+  cardsListQuery, addCardMutation, deleteCardMutation, cardDetailsQuery
+};

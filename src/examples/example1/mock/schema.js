@@ -18,9 +18,16 @@ const typeDefs = `
     sex: String
   }
 
+  type Detail {
+    id: ID! 
+    name: String
+    message: String
+  }
+
   #数据查询
   type Query {
     cards: [Card]
+    cardDetail(id: ID!): Detail
   }
 
   #数据修改

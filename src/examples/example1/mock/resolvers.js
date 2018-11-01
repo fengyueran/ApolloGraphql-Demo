@@ -1,20 +1,24 @@
 const cards = [{
-  id: 1,
+  id: '1',
   caseName: 'HT-18CH7U',
   name: 'snow',
   sex: 'male'
 }, {
-  id: 2,
+  id: '2',
   caseName: 'HT-18MZU3',
   name: 'lucy',
-  sex: 'female'
+  sex: 'female',
 }];
 
 let nextId = 3;
 
 export const resolvers = {
   Query: {
-    cards: () => cards
+    cards: () => cards,
+    cardDetail: (root, { id }) => {
+      const foundCard = cards.find(card => card.id === id);
+      return foundCard;
+    },
   },
   Mutation: {
     addCard: (root, { i }) => {

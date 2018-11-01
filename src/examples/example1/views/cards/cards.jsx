@@ -6,12 +6,15 @@ import styled from 'styled-components';
 import { graphql, compose } from 'react-apollo';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
 import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../models/gql/remote';
+import CardDetail from './card-detail';
+
 
 const cardStyles = {
   width: 200,
-  height: 110,
+  height: 120,
   margin: 5,
   background: '#AFC9F1',
+  position: 'relative',
 };
 
 const Text = styled.span`
@@ -27,6 +30,15 @@ const Button = styled.button`
   height: 39px;
   width: 85px;
   margin: 5px;
+`;
+
+const DetailButton = styled.button`
+  outline: none;
+  margin: 5px;
+  position: absolute;
+  right: 0;
+  width: 60px;
+  height: 30px;
 `;
 
 // const AddCard = ({ addCard1, addCard2 }) => (
@@ -135,22 +147,42 @@ const DeleteCardWithMutation = graphql(
   }
 )(DeleteCard);
 
+// eslint-disable-next-line
+class Card extends React.Component {
+  state = {
+    isShowDetail: false,
+  }
 
-const Card = ({ caseName, name, sex }) => (
-  <VContainer style={cardStyles}>
-    <CaseName>
-      {caseName}
-    </CaseName>
-    <Text>
-      {`Name: ${name}`}
-    </Text>
-    <Text>
-      {`Sex: ${sex}`}
-    </Text>
-  </VContainer>
-);
+  render() {
+    const { 
+      id, caseName, name, sex
+    } = this.props;
+    const { isShowDetail } = this.state;
+    return (
+      <VContainer style={cardStyles}>
+        <CaseName>
+          {caseName}
+        </CaseName>
+        <Text>
+          {`Name: ${name}`}
+        </Text>
+        <Text>
+          {`Sex: ${sex}`}
+        </Text>
+        <DetailButton onClick={() => this.setState({ isShowDetail: !isShowDetail })}>
+          详情
+        </DetailButton>
+        {
+          isShowDetail && <CardDetail cardId={id} />
+        }
+      </VContainer>
+    );
+  }
+}
+
 
 Card.propTypes = {
+  id: PropTypes.string.isRequired,
   caseName: PropTypes.string.isRequired,
   sex: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
