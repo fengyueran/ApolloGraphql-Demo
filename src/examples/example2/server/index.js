@@ -4,8 +4,10 @@ import { execute, subscribe } from 'graphql';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { createServer } from 'http';
-
+import { PubSub, withFilter } from 'graphql-subscriptions';
 import { schema } from '../mock/schema';
+
+const pubsub = new PubSub();
 
 const PORT = 9090;
 const app = express();
@@ -20,7 +22,8 @@ app.use('/graphql', bodyParser.json(), graphqlExpress({
 }));
 
 app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql'
+  endpointURL: '/graphql',
+  subscriptionsEndpoint: `ws://localhost:9090/subscriptions`
 }));
 
 ws.listen(PORT, () => {

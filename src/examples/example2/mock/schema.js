@@ -32,6 +32,10 @@ const typeDefs = `
     deleteCard(caseName: String): Card
     updateCard(id: String, age: Int): Card
   }
+
+  type Subscription {
+    cardAdded(cardId: ID!): Card
+  }
 `;
 
 // Apollo Client Developer Tools

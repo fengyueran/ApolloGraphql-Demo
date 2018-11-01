@@ -32,7 +32,5 @@ export const resolvers = {
       console.log('delete card', root);
       return cards;
     }
-
-  }
-
+  },
 };

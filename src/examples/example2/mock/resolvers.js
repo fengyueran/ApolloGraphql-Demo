@@ -1,3 +1,6 @@
+import { PubSub, withFilter } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
 const cards = [{
   id: '1',
   caseName: 'HT-18CH7U',
@@ -27,6 +30,7 @@ export const resolvers = {
       const newCard = { id: nextId++, ...i };
       cards.push(newCard);
       console.log('add card', cards);
+      pubsub.publish('cardAdded', { cardAdded: newCard, cardId: nextId });
       return newCard;
     },
     deleteCard: (root, args) => {
@@ -47,6 +51,16 @@ export const resolvers = {
       return foundedCard;
     }
 
+  },
+  Subscription: {
+    cardAdded: {
+      subscribe: withFilter(() => pubsub.asyncIterator('cardAdded'), (payload, variables) => {
+        // The `messageAdded` channel includes events for all channels, so we filter to only
+        // pass through events for the channel specified in the query
+        return payload.cardId === variables.cardId;
+      })
+    }
   }
+
 
 };
