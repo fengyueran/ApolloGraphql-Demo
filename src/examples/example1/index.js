@@ -28,16 +28,16 @@ const Hearder = styled.div`
 
 const asyncMiddleware = setContext(request => new Promise((success) => {
   setTimeout(() => {
-    success({ token: 'async found token' });
-  }, 500);
+    success();
+  }, 1000);
 }));
 
 const httpLink = new HttpLink({ 
   uri: 'http://localhost:8080/graphql'
 });
 const client = new ApolloClient({
-  // link: concat(asyncMiddleware, httpLink),
-  link: httpLink,
+  link: concat(asyncMiddleware, httpLink),
+  // link: httpLink,
   cache: new InMemoryCache()
 });
 

@@ -22,6 +22,12 @@ const typeDefs = `
   type Query {
     channels: [Channel]  # "[]" 意味着返回数组，":"后为返回值
   }
+
+  #数据修改
+  type Mutation {
+    addChannel(name: String!): Channel
+    deleteChannel(id: String!): Channel
+  }
 `;
 
 // Apollo Client Developer Tools
@@ -44,9 +50,9 @@ const typeDefs = `
   }
 
   mutation {
-  addCard(caseName: "HT-18YKI6"){
+  addChannel(name: "channel 3"){
     id
-    caseName
+    name
   }
 }
 */

@@ -11,39 +11,45 @@ const channels = [{
   time: '2018',
 }];
 
-// let nextId = 3;
+let nextId = 3;
 
 export const resolvers = {
   Query: {
     channels: () => channels,
   },
-  // Mutation: {
-  //   addCard: (root, { i }) => {
-  //     const newCard = { id: nextId++, ...i };
-  //     cards.push(newCard);
-  //     console.log('add card', cards);
-  //     pubsub.publish('cardAdded', { cardAdded: newCard, cardId: nextId });
-  //     return newCard;
-  //   },
-  //   deleteCard: (root, args) => {
-  //     cards.splice(0, 1);
-  //     console.log('delete card', root);
-  //     return cards[0];
-  //   },
-  //   updateCard: (root, { id, age }) => {
-  //     console.log('55555555');
-  //     const index = cards.findIndex(card => card.id === id);
-  //     let foundedCard;
-  //     if (index >= 0) {
-  //       foundedCard = cards[index];
-  //       foundedCard.age = age;
-  //       cards[index] = foundedCard;
-  //     }
+  Mutation: {
+    addChannel: (root, { name }) => {
+      console.log('name', name);
+      const newChannel = { id: nextId++, name };
+      channels.push(newChannel);
+      // pubsub.publish('cardAdded', { cardAdded: newCard, cardId: nextId });
+      return newChannel;
+    },
+    deleteChannel: (root, args) => {
+      const { id } = args;
+      const foundIndex = channels.findIndex(ch => ch.id === +id);
+      let foundChannel;
+      if (foundIndex >= 0) {
+        foundChannel = channels[foundIndex];
+        channels.splice(foundIndex, 1);
+      }
+      console.log('delete card', foundChannel);
+      return foundChannel;
+    },
+    // updateCard: (root, { id, age }) => {
+    //   console.log('55555555');
+    //   const index = cards.findIndex(card => card.id === id);
+    //   let foundedCard;
+    //   if (index >= 0) {
+    //     foundedCard = cards[index];
+    //     foundedCard.age = age;
+    //     cards[index] = foundedCard;
+    //   }
 
-  //     return foundedCard;
-  //   }
+    //   return foundedCard;
+    // }
 
-  // },
+  },
   // Subscription: {
   //   cardAdded: {
   //     // subscribe: withFilter(() => pubsub.asyncIterator('cardAdded'), (payload, variables) => {

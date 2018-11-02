@@ -19,24 +19,23 @@ const cardDetailsQuery = gql`
   }
 `;
 
-const addCardMutation = gql`
-  mutation addCard($i: CreateCardInput!) {
-    addCard(i: $i) {
-      caseName
+const addChannelMutation = gql`
+  mutation addChannel($name: String!) { #必须与schema一致
+    addChannel(name: $name) {
+      id
       name
-      sex
     }
   }
 `;
 
-const deleteCardMutation = gql`
-  mutation deleteCard($caseName: String!) {
-    deleteCard(caseName: $caseName) {
-      caseName #只返回caseName
+const deleteChannelMutation = gql`
+  mutation deleteChannel($id: String!) {
+    deleteChannel(id: $id) {
+      id #只返回name
     }
   }
 `;
 
 export { 
-  channelsListQuery, addCardMutation, deleteCardMutation, cardDetailsQuery
+  channelsListQuery, addChannelMutation, deleteChannelMutation, cardDetailsQuery
 };
