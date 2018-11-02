@@ -26,10 +26,6 @@ const Hearder = styled.div`
   align-items: center;
 `;
 
-const H1 = styled.h1`
-  font-size: 1.5em;
-`;
-
 const asyncMiddleware = setContext(request => new Promise((success) => {
   setTimeout(() => {
     success({ token: 'async found token' });

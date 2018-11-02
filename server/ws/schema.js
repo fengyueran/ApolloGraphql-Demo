@@ -21,29 +21,25 @@ const typeDefs = `
   #数据查询
   type Query {
     channels: [Channel]  # "[]" 意味着返回数组，":"后为返回值
-    card(name: String!): Card
-  }
-
-  #数据修改
-  type Mutation {
-    addCard(i: CreateCardInput): Card #返回Card类型数据(必须带返回值)
-    deleteCard(caseName: String): Card
-    updateCard(id: String, age: Int): Card
-  }
-
-  type Subscription {
-    cardAdded(cardId: ID): Card
   }
 `;
 
 // Apollo Client Developer Tools
 /*
+  查询所有的type类型
   query {
-    cards {
+    __schema {
+      types {
+        name
+      }
+    }
+  }
+
+  query {
+    channels {
       id
-      caseName
       name
-      sex
+      time
     }
   }
 
@@ -55,7 +51,10 @@ const typeDefs = `
 }
 */
 
+// const schema = makeExecutableSchema({ typeDefs });
+// addMockFunctionsToSchema({ schema }); // 快速构建mock函数
+
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-// addMockFunctionsToSchema({ schema }); //快速构建mock函数， resolvers自定义
+
 
 export { schema };

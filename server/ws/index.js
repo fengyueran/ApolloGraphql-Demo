@@ -4,12 +4,15 @@ import { execute, subscribe } from 'graphql';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { createServer } from 'http';
+import cors from 'cors';
 import { schema } from './schema';
 
 
 const PORT = 8080;
 const app = express();
 const ws = createServer(app);
+
+app.use('*', cors({ origin: 'http://localhost:1989' }));
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
