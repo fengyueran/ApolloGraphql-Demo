@@ -4,6 +4,7 @@ import { VContainer } from '@xinghunm/widgets';
 import { ApolloProvider } from 'react-apollo';
 import client from './apollo-client';
 import CardsWithData from './views/cards';
+import Animals from './views/animals';
 import TodoPanel from './views/TodoPanel';
 
 class App extends Component {

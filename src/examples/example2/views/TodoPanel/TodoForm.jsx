@@ -1,12 +1,10 @@
 
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'react';
 import { Mutation } from 'react-apollo';
 import { ADD_TODO } from '../../models/gql/local';
 
 
-const TodoForm = ({ id, completed, text }) => (
+const TodoForm = () => (
   <Mutation 
     mutation={ADD_TODO}
   >
@@ -35,11 +33,5 @@ const TodoForm = ({ id, completed, text }) => (
       }
     }
   </Mutation>);
-
-TodoForm.propTypes = {
-  id: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired,
-}; 
 
 export default TodoForm;

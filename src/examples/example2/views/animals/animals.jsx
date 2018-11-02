@@ -9,6 +9,7 @@ import {
   cardsListQuery, cardQuery, addCardMutation, deleteCardMutation,
   updateCardMutation
 } from '../../models/gql/remote';
+
 import { cardsSubscription } from '../../models/gql/subscriptions';
 
 const cardStyles = {
@@ -48,7 +49,7 @@ const AddCard = () => (
                   age: 20
                 }
               },
-              refetchQueries: [{ query: cardsListQuery }], // 重新获取
+              // refetchQueries: [{ query: cardsListQuery }], // 重新获取
             });
           }}
         >
@@ -156,13 +157,30 @@ const StartQuery = ({ onCardFetched }) => (
 StartQuery.propTypes = {
   onCardFetched: PropTypes.func.isRequired
 };
-class App extends React.Component {
+
+class Animals extends React.Component {
   state = {
     foundedCard: null
   }
 
   componentWillMount() {
+    const { data, newCardId } = this.props;
+    data.subscribeToMore({
+      document: cardsSubscription,
+      variables: {
+        cardId: 5
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) {
+          return prev;
+        }
 
+        const newCard = subscriptionData.data.cardAdded;
+        const { cards } = prev;
+        console.log('update query', subscriptionData);
+        return { cards: cards.concat([newCard]) };
+      }
+    });
   }
 
   onCardFetched = (data) => {
@@ -172,57 +190,47 @@ class App extends React.Component {
 
   render() {
     const { foundedCard } = this.state;
-    return (
-      <Query 
-        query={cardsListQuery}
-        notifyOnNetworkStatusChange
-        // pollInterval={500}// 每500ms query一次
-      >
-        {
-          ({ 
-            loading, error, data, startPolling, stopPolling, refetch,
-            networkStatus 
-          }) => {
-            const cards = data && data.cards;
-            if (networkStatus === 4) return 'Refetching'; // networkStatus1-8，详见networkStatushttps://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-networkStatus
-            if (loading) {
-              return <p>Loading</p>;
-            }
-            if (error) {
-              return <p>{error.message}</p>;
-            }
+    const {
+      loading, error, data, startPolling, stopPolling, refetch,
+      networkStatus 
+    } = this.props;
+    const cards = data && data.cards;
+    if (networkStatus === 4) return 'Refetching'; // networkStatus1-8，详见networkStatushttps://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-networkStatus
+    if (loading) {
+      return <p>Loading</p>;
+    }
+    if (error) {
+      return <p>{error.message}</p>;
+    }
 
-            return (
-              <VContainer>
-                <LineContainer>
-                  <AddCard />
-                  <DeleteCard />
-                  <UpdateCard />
-                  <Button onClick={() => refetch()}>
-                    Refetch
-                  </Button>
-                  <StartQuery onCardFetched={this.onCardFetched} />
-                </LineContainer>
-                <FlexContainer>
-                  {
-                    cards && cards.map((card, index) => (
-                      <Card key={index} {...card} />
-                    ))
-                  }
-                </FlexContainer>
-                {
-                  foundedCard && (
-                    <Text>
-                      {`This is ${foundedCard.name}, Sex:${foundedCard.sex}, CaseName: ${foundedCard.caseName}` }
-                    </Text>
-                  )
-                }
-              </VContainer>
-            );
+    return (
+      <VContainer>
+        <LineContainer>
+          <AddCard />
+          <DeleteCard />
+          <UpdateCard />
+          <Button onClick={() => refetch()}>
+            Refetch
+          </Button>
+          <StartQuery onCardFetched={this.onCardFetched} />
+        </LineContainer>
+        <FlexContainer>
+          {
+            cards && cards.map((card, index) => (
+              <Card key={index} {...card} />
+            ))
           }
-        }
-      </Query>);
+        </FlexContainer>
+      </VContainer>
+    );
   }
 }
 
-export default App;
+const AnimalsWithQuery = graphql(cardsListQuery, {
+  options: { 
+    // pollInterval: 500,
+    notifyOnNetworkStatusChange: true
+  }
+})(Animals);
+
+export default AnimalsWithQuery;

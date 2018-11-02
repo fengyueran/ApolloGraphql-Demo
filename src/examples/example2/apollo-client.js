@@ -23,11 +23,12 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:9090/graphql',
+  uri: 'ws://localhost:8080/graphql',
   options: {
     reconnect: true,
   }
 });
+const { subscriptionClient } = wsLink;
 
 const client = new ApolloClient({
   cache,

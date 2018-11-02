@@ -86,6 +86,7 @@
   "scripts": {
     "start": "PORT=1989 node scripts/start.js",
     "build": "node scripts/build.js",
+    "ws": "NODE_ENV=development nodemon --exec 'babel-node' server/ws/index.js",
     "mockexam1": "NODE_ENV=development nodemon --exec 'babel-node' src/examples/example1/server/index.js",
     "mockexam2": "NODE_ENV=development nodemon --exec 'babel-node' src/examples/example2/server/index.js",
     "test": "jest test --colors",
