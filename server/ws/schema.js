@@ -12,17 +12,15 @@ const typeDefs = `
   }
 
   #数据类型
-  type Card {
+  type Channel {
     id: ID!   # "!" 表示必填参数
-    caseName: String
     name: String
-    sex: String
-    age: Int
+    time: String
   }
 
   #数据查询
   type Query {
-    cards: [Card]
+    channels: [Channel]  # "[]" 意味着返回数组，":"后为返回值
     card(name: String!): Card
   }
 

@@ -1,12 +1,10 @@
 import gql from 'graphql-tag';
 
-const cardsListQuery = gql`
-  query CardsListQuery {
-    cards { # 返回cards数组，数组每个元素包含id，caseName, name和sex
+const channelsListQuery = gql`
+  query ChannelsListQuery {
+    channels { # 返回channels数组，数组每个元素包含id和name, 返回的元素应为schema中channel类型字段的子集
       id
-      caseName
       name
-      sex
     }
   }
 `;
@@ -40,5 +38,5 @@ const deleteCardMutation = gql`
 `;
 
 export { 
-  cardsListQuery, addCardMutation, deleteCardMutation, cardDetailsQuery
+  channelsListQuery, addCardMutation, deleteCardMutation, cardDetailsQuery
 };
