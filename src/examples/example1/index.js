@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import styled from 'styled-components';
 import { LineContainer } from '@xinghunm/widgets';
 import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -7,7 +7,28 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, concat, Observable } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
-import CardsWithData from './views/cards';
+import ChannelsList from './views/channels-list';
+
+
+const Root = styled.div`
+  color: #FFFFFF;
+`;
+
+const Hearder = styled.div`
+  background-color: #333;
+  color: #fff;
+  padding: 10px 30px;
+  text-align: left;
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+`;
+
+const H1 = styled.h1`
+  font-size: 1.5em;
+`;
 
 const asyncMiddleware = setContext(request => new Promise((success) => {
   setTimeout(() => {
@@ -28,14 +49,12 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">Welcome to Apollo Graphql</h1>
-          </header>
-          <LineContainer>
-            <CardsWithData />
-          </LineContainer>
-        </div>
+        <Root>
+          <Hearder>
+            React + GraphQL Tutorial
+          </Hearder>
+          <ChannelsList />
+        </Root>
       </ApolloProvider>
     );
   }

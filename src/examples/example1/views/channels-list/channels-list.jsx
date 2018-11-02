@@ -9,6 +9,19 @@ import { cardsListQuery, addCardMutation, deleteCardMutation } from '../../model
 import CardDetail from './card-detail';
 
 
+const Ul = styled.ul`
+  list-style: none;
+`;
+
+const Li = styled.li`
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  width: 20%;
+  text-align: left;
+`;
+
 const cardStyles = {
   width: 200,
   height: 120,
@@ -218,4 +231,14 @@ Cards.propTypes = {
 const CardsWithData = graphql(cardsListQuery, {
   // options: { pollInterval: 500 } // 5s拉取一次数据
 })(Cards);
-export default CardsWithData;
+// export default CardsWithData;
+
+
+const ChannelsList = () => (
+  <Ul>
+    <Li>Channel 1</Li>
+    <Li>Channel 2</Li>
+  </Ul>
+);
+
+export default ChannelsList;
