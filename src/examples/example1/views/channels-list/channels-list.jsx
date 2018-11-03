@@ -115,13 +115,13 @@ const AddChannelWithMutations = compose(
         variables: { 
           name,
         },
-        // optimisticResponse: {
-        //   addCard: {
-        //     name: 'test',
-        //     id: 'tmp',
-        //     __typename: 'Card'
-        //   }
-        // },
+        optimisticResponse: { // update前更新
+          addChannel: {
+            name,
+            id: Math.round(Math.random() * -1000000),
+            __typename: 'Channel'
+          }
+        },
         update: (cache, { data: { addChannel }, loading, error }) => { // addChannel为该mutation返回的数据
           // Read the data from the cache for this query.
           const { channels } = cache.readQuery({ query: channelsListQuery });
@@ -135,11 +135,11 @@ const AddChannelWithMutations = compose(
       })
     }),
   }),
-  // graphql(addChannelMutation, {
-  //   props: ({ mutate }) => ({
-  //     addChannel2: () => mutate()
-  //   }),
-  // }),
+  graphql(addChannelMutation, {
+    props: ({ mutate }) => ({
+      addChannel2: () => mutate()
+    }),
+  }),
 )(AddChannel);
 
 const DeleteChannel = ({ id, deleteChannel }) => (
@@ -185,6 +185,7 @@ const ChannelsList = ({ data: { loading, error, channels } }) => {
   if (error) {
     return <p>{error.message}</p>;
   }
+  const optimisticStyle = { color: 'rgba(255, 255, 255, 0.5)' };
   return (
     <ChannelsContainer>
       <AddChannelWithMutations />
@@ -192,7 +193,7 @@ const ChannelsList = ({ data: { loading, error, channels } }) => {
         { 
           channels.map(ch => (
             <LineContainer>
-              <Li key={ch.id}>{ch.name}</Li>
+              <Li style={ch.id < 0 ? optimisticStyle : null} key={ch.id}>{ch.name}</Li>
               <DeleteChannelWithMutation id={ch.id} />
             </LineContainer>
           ))
