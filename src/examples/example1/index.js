@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Route } from "react-router-dom";
 import { LineContainer } from '@xinghunm/widgets';
 import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -7,11 +8,14 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, concat, Observable } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
+import ChannelDetails from './views/channels-list/ChannelDetails';
 import ChannelsList from './views/channels-list';
 
 
 const Root = styled.div`
   color: #FFFFFF;
+  height: 100vh;
+  background-image: linear-gradient(175deg, #2b3658 0%, #523e5b 100%);
 `;
 
 const Hearder = styled.div`
@@ -50,6 +54,7 @@ class App extends Component {
             React + GraphQL Tutorial
           </Hearder>
           <ChannelsList />
+          <Route path="/example1/channel/:channelId" component={ChannelDetails} />
         </Root>
       </ApolloProvider>
     );

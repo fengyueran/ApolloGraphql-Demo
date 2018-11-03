@@ -1,1 +1,1 @@
-export { default } from './channels-list';
+export { default } from './ChannelsList';

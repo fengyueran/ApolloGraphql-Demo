@@ -4,9 +4,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql, compose } from 'react-apollo';
+import { Link } from 'react-router-dom';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
 import { channelsListQuery, addChannelMutation, deleteChannelMutation } from '../../models/gql/remote';
-import CardDetail from './card-detail';
+import ChannelDetails from './ChannelDetails';
 
 
 const Ul = styled.ul`
@@ -18,17 +19,17 @@ const Li = styled.li`
   padding: 10px 20px;
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
   font-weight: 400;
   width: 20%;
   text-align: left;
+  a {
+    color: rgba(255, 255, 255, 0.8);
+  }
 `;
 
 const ChannelsContainer = styled.div`
   padding: 0 30px;
   position: relative;
-  height: 100vh;
-  background-image: linear-gradient(175deg, #2b3658 0%, #523e5b 100%);
   input {
     width: 200px;
     background-color: transparent;
@@ -192,8 +193,12 @@ const ChannelsList = ({ data: { loading, error, channels } }) => {
       <Ul>
         { 
           channels.map(ch => (
-            <LineContainer>
-              <Li style={ch.id < 0 ? optimisticStyle : null} key={ch.id}>{ch.name}</Li>
+            <LineContainer key={ch.id}>
+              <Li style={ch.id < 0 ? optimisticStyle : null}>
+                <Link to={ch.id < 0 ? `/example1` : `/example1/channel/${ch.id}`}>
+                  {ch.name}
+                </Link>
+              </Li>
               <DeleteChannelWithMutation id={ch.id} />
             </LineContainer>
           ))

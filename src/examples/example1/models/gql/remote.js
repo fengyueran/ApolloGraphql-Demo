@@ -1,5 +1,15 @@
 import gql from 'graphql-tag';
 
+
+const channelQuery = gql`
+  query ChannelQuery($channelId : ID!) {
+    channel(id: $channelId) {
+      id
+      name
+    }
+  }
+`;
+
 const channelsListQuery = gql`
   query ChannelsListQuery {
     channels { # 返回channels数组，数组每个元素包含id和name, 返回的元素应为schema中channel类型字段的子集
@@ -9,12 +19,15 @@ const channelsListQuery = gql`
   }
 `;
 
-const cardDetailsQuery = gql`
-  query CardDetailsQuery($cardId: ID!) {
-    cardDetail(id: $cardId) { 
+const channelDetailsQuery = gql`
+  query ChannelDetailsQuery($channelId : ID!) {
+    channel(id: $channelId) {
       id
       name
-      message
+      messages {
+        id
+        text
+      }
     }
   }
 `;
@@ -36,6 +49,16 @@ const deleteChannelMutation = gql`
   }
 `;
 
+const addMessageMutation = gql`
+  mutation addMessage($message: MessageInput!) {
+    addMessage(message: $message) {
+      id
+      text
+    }
+  }
+`;
+
 export { 
-  channelsListQuery, addChannelMutation, deleteChannelMutation, cardDetailsQuery
+  channelQuery, channelsListQuery, addChannelMutation, deleteChannelMutation, addMessageMutation, 
+  channelDetailsQuery
 };
