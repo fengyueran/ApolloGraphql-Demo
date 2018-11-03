@@ -33,6 +33,10 @@ const typeDefs = `
     deleteChannel(id: String!): Channel
     addMessage(message: MessageInput!): Message
   }
+
+  type Subscription {
+    messageAdded(channelId: ID!): Message
+  }
 `;
 
 // Apollo Client Developer Tools

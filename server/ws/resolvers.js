@@ -38,7 +38,6 @@ export const resolvers = {
       console.log('name', name);
       const newChannel = { id: nextId++, name };
       channels.push(newChannel);
-      // pubsub.publish('cardAdded', { cardAdded: newCard, cardId: nextId });
       return newChannel;
     },
     deleteChannel: (root, args) => {
@@ -60,22 +59,24 @@ export const resolvers = {
        
       const newMessage = { id: String(nextMessageId++), text: message.text };
       channel.messages.push(newMessage);
+      console.log('add new message', newMessage);
+      pubsub.publish('messageAdded', { messageAdded: newMessage, channelId: message.channelId });
       return newMessage;
     },
 
   },
-  // Subscription: {
-  //   cardAdded: {
-  //     // subscribe: withFilter(() => pubsub.asyncIterator('cardAdded'), (payload, variables) => {
-  //     //   // The `cardAdded` card includes events for all cards, so we filter to only
-  //     //   // pass through events for the channel specified in the query
-  //     //   console.log('payload cardId', payload.cardId);
-  //     //   console.log('variables cardId', variables.cardId);
-  //     //   return payload.cardId === variables.cardId;
-  //     // })
-  //     subscribe: () => pubsub.asyncIterator(['cardAdded'])
-  //   }
-  // }
+  Subscription: {
+    messageAdded: {
+      subscribe: withFilter(() => pubsub.asyncIterator('messageAdded'), (payload, variables) => {
+        // The `messageAdded` channel includes events for all channels, so we filter to only
+        // pass through events for the channel specified in the query
+        console.log('payload channelId', payload.channelId);
+        console.log('variables channelId', variables.channelId);
+        return payload.channelId === variables.channelId;
+      })
+      // subscribehttp://localhost:1989/example1/channel/1: () => pubsub.asyncIterator(['messageAdded'])
+    }
+  }
 
 
 };

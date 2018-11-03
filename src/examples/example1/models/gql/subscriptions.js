@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
 
-export const cardsSubscription = gql`
-  subscription cardAdded($cardId: ID!) {
-    cardAdded(cardId: $cardId) {
+export const messagesSubscription = gql`
+  subscription messageAdded($channelId: ID!) {
+    messageAdded(channelId: $channelId) {
       id
-      name
+      text
     }
   }
 `;
