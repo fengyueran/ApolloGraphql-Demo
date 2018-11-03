@@ -20,13 +20,16 @@ const channelsListQuery = gql`
 `;
 
 const channelDetailsQuery = gql`
-  query ChannelDetailsQuery($channelId : ID!) {
+  query ChannelDetailsQuery($channelId : ID!, $cursor: String) {
     channel(id: $channelId) {
       id
       name
-      messages {
-        id
-        text
+      messageFeed(cursor: $cursor) @connection(key: "messageFeed") {
+        cursor
+        messages {
+          id
+          text
+        }
       }
     }
   }

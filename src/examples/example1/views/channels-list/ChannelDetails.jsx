@@ -20,6 +20,15 @@ const Text = styled.div`
   color: #22A699;
 `;
 
+const Button = styled.button`
+  margin-left: 29px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 3px;
+  outline: none;
+`;
+
+
 class ChannelDetails extends React.Component {
   componentWillMount() {
     const { data, match } = this.props;
@@ -33,10 +42,18 @@ class ChannelDetails extends React.Component {
           return prev;
         }
         const newMessage = subscriptionData.data.messageAdded;
-        const messsages = prev.channel.messages;
+        const messsages = prev.channel.messageFeed.messages;
 
-        if (!prev.channel.messages.find(msg => msg.id === newMessage.id)) {
-          return { channel: { ...prev.channel, messages: messsages.concat([newMessage]) } };
+        if (!prev.channel.messageFeed.messages.find(msg => msg.id === newMessage.id)) {
+          return { 
+            channel: { 
+              ...prev.channel,
+              messageFeed: { 
+                messages: messsages.concat([newMessage]),
+                __typename: 'MessageFeed'
+              }
+            }
+          };
         }
         return prev;
       }
@@ -44,7 +61,7 @@ class ChannelDetails extends React.Component {
   }
 
   render() {
-    const { data: { loading, error, channel }, match } = this.props;
+    const { data: { loading, error, channel }, match, loadOlderMessages } = this.props;
     if (loading) {
       return <ChannelPreview channelId={match.params.channelId} />;
     }
@@ -56,20 +73,56 @@ class ChannelDetails extends React.Component {
         <Text>
           {channel && channel.name}
         </Text>
-        <MessageList messages={channel.messages} />
+        <Button onClick={loadOlderMessages}>
+          Load Older Messages
+        </Button>
+        <MessageList messages={channel.messageFeed.messages} />
       </div>);
   }
 }
 
 ChannelDetails.propTypes = {
   data: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  loadOlderMessages: PropTypes.func.isRequired
 };
 
 const ChannelDetailsWithQuery = graphql(channelDetailsQuery, {
   options: props => ({
     variables: { channelId: props.match.params.channelId }
   }),
+  props: props => ({
+    data: props.data,
+    loadOlderMessages: () => {
+      const { data } = props;
+      data.fetchMore({
+        variables: {
+          channelId: props.data.channel.id,
+          cursor: props.data.channel.messageFeed.cursor,
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const prevMessageFeed = previousResult.channel.messageFeed;
+          const newMessageFeed = fetchMoreResult.channel.messageFeed;
+          const newChannelData = { 
+            ...previousResult.channel,
+            messageFeed: {
+              messages: [
+                ...newMessageFeed.messages,
+                ...prevMessageFeed.messages
+              ],
+              cursor: newMessageFeed.cursor,
+              __typename: 'MessageFeed'
+            }
+          };
+          const newData = {
+            ...previousResult,
+            channel: newChannelData,
+          };
+          return newData;
+        }
+      });
+    }
+  })
 })(ChannelDetails);
 
 export default ChannelDetailsWithQuery;
