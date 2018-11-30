@@ -10,6 +10,12 @@ const channelQuery = gql`
   }
 `;
 
+const serverAddressQuery = gql`
+  query ServerAddressQuery {
+    serverAddress 
+  }
+`;
+
 const channelsListQuery = gql`
   query ChannelsListQuery {
     channels { # 返回channels数组，数组每个元素包含id和name, 返回的元素应为schema中channel类型字段的子集
@@ -63,5 +69,5 @@ const addMessageMutation = gql`
 
 export { 
   channelQuery, channelsListQuery, addChannelMutation, deleteChannelMutation, addMessageMutation, 
-  channelDetailsQuery
+  channelDetailsQuery, serverAddressQuery
 };

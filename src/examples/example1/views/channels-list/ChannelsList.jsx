@@ -6,7 +6,9 @@ import styled from 'styled-components';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import { LineContainer, VContainer, FlexContainer } from '@xinghunm/widgets';
-import { channelsListQuery, addChannelMutation, deleteChannelMutation } from '../../models/gql/remote';
+import { 
+  serverAddressQuery, channelsListQuery, addChannelMutation, deleteChannelMutation
+} from '../../models/gql/remote';
 import ChannelDetails from './ChannelDetails';
 
 
@@ -179,20 +181,23 @@ const DeleteChannelWithMutation = graphql(
 )(DeleteChannel);
 
 
-const ChannelsList = ({ data: { loading, error, channels } }) => {
-  if (loading) {
+const ChannelsList = ({ channelsListData, serverAddressData }) => {
+  if (channelsListData.loading || serverAddressData.loading) {
     return <p>Loading ...</p>;
   }
-  if (error) {
-    return <p>{error.message}</p>;
+  if (channelsListData.error || serverAddressData.error) {
+    return <p>{channelsListData.error.message}</p>;
   }
+
+  console.log('serverAddress:', serverAddressData.serverAddress);
+  
   const optimisticStyle = { color: 'rgba(255, 255, 255, 0.5)' };
   return (
     <ChannelsContainer>
       <AddChannelWithMutations />
       <Ul>
         { 
-          channels.map(ch => (
+          channelsListData.channels.map(ch => (
             <LineContainer key={ch.id}>
               <Li style={ch.id < 0 ? optimisticStyle : null}>
                 <Link to={ch.id < 0 ? `/example1` : `/example1/channel/${ch.id}`}>
@@ -208,11 +213,22 @@ const ChannelsList = ({ data: { loading, error, channels } }) => {
 };
 
 ChannelsList.propTypes = {
-  data: PropTypes.object.isRequired,
+  channelsListData: PropTypes.object.isRequired, 
+  serverAddressData: PropTypes.object.isRequired,
 };
 
-const ChannelsListWithData = graphql(channelsListQuery, {
-  // options: { pollInterval: 500 } // 5s拉取一次数据
-})(ChannelsList);
+// const ChannelsListWithData = graphql(channelsListQuery, {
+//   // options: { pollInterval: 500 } // 5s拉取一次数据
+// })(ChannelsList);
+
+const ChannelsListWithData = compose(
+  graphql(channelsListQuery, {
+    name: "channelsListData"
+    // options: { pollInterval: 500 } // 5s拉取一次数据
+  }),
+  graphql(serverAddressQuery, {
+    name: "serverAddressData"
+  }),
+)(ChannelsList);
 
 export default ChannelsListWithData;

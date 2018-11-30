@@ -72,6 +72,7 @@ for (let i = 0; i < 50; i++) {
 
 export const resolvers = {
   Query: {
+    serverAddress: () => "http://localhost:8080",
     channels: () => channels,
     channel: (root, { id }) => channels.find(channel => channel.id === id),
   },

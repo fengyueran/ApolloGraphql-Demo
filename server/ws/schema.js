@@ -33,6 +33,7 @@ const typeDefs = `
 
   #数据查询
   type Query {
+    serverAddress: String
     channels: [Channel]  # "[]" 意味着返回数组，":"后为返回值
     channel(id: ID!): Channel
   }
