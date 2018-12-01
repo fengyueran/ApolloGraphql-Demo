@@ -10,6 +10,7 @@ import {
   serverAddressQuery, channelsListQuery, addChannelMutation, deleteChannelMutation
 } from '../../models/gql/remote';
 import ChannelDetails from './ChannelDetails';
+import SelectedChannel from './SelectedChannel';
 
 
 const Ul = styled.ul`
@@ -180,37 +181,53 @@ const DeleteChannelWithMutation = graphql(
   }
 )(DeleteChannel);
 
-
-const ChannelsList = ({ channelsListData, serverAddressData }) => {
-  if (channelsListData.loading || serverAddressData.loading) {
-    return <p>Loading ...</p>;
-  }
-  if (channelsListData.error || serverAddressData.error) {
-    return <p>{channelsListData.error.message}</p>;
+class ChannelsList extends React.Component {
+  state = {
+    selectedChannelId: null
   }
 
-  console.log('serverAddress:', serverAddressData.serverAddress);
-  
-  const optimisticStyle = { color: 'rgba(255, 255, 255, 0.5)' };
-  return (
-    <ChannelsContainer>
-      <AddChannelWithMutations />
-      <Ul>
-        { 
-          channelsListData.channels.map(ch => (
-            <LineContainer key={ch.id}>
-              <Li style={ch.id < 0 ? optimisticStyle : null}>
-                <Link to={ch.id < 0 ? `/example1` : `/example1/channel/${ch.id}`}>
-                  {ch.name}
-                </Link>
-              </Li>
-              <DeleteChannelWithMutation id={ch.id} />
-            </LineContainer>
-          ))
-        }
-      </Ul>
-    </ChannelsContainer>);
-};
+  handleSelectChannel = (id) => {
+    this.setState({ selectedChannelId: id });
+  }
+
+  render() {
+    const { channelsListData, serverAddressData } = this.props;
+    if (channelsListData.loading || serverAddressData.loading) {
+      return <p>Loading ...</p>;
+    }
+    if (channelsListData.error || serverAddressData.error) {
+      return <p>{channelsListData.error.message}</p>;
+    }
+
+    console.log('serverAddress:', serverAddressData.serverAddress);
+    const { selectedChannelId } = this.state;
+    const optimisticStyle = { color: 'rgba(255, 255, 255, 0.5)' };
+    return (
+      <ChannelsContainer>
+        <AddChannelWithMutations />
+        <Ul>
+          { 
+            channelsListData.channels.map(ch => (
+              <LineContainer key={ch.id}>
+                <Li 
+                  onClick={() => this.handleSelectChannel(ch.id)}
+                  style={ch.id < 0 ? optimisticStyle : null}
+                >
+                  <Link to={ch.id < 0 ? `/example1` : `/example1/channel/${ch.id}`}>
+                    {ch.name}
+                  </Link>
+                </Li>
+                <DeleteChannelWithMutation id={ch.id} />
+              </LineContainer>
+            ))
+          }
+          {
+            selectedChannelId && <SelectedChannel channelId={selectedChannelId} />
+          }
+        </Ul>
+      </ChannelsContainer>);
+  }
+}
 
 ChannelsList.propTypes = {
   channelsListData: PropTypes.object.isRequired, 
